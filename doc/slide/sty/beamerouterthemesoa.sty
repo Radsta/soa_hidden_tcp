@@ -1,0 +1,102 @@
+\ProvidesPackage{beamerouterthemesoa}[2004/11/27 v1.0 for beamer 3.01]
+
+% A Beamer outer theme to put footlines on slides
+%
+% The user can override the default contents of the footline
+% through the command \setfootline{whatever}
+%
+% Rouben Rostamian <rostamian@umbc.edu>
+
+\mode<presentation>
+
+\usepackage{pgfcomp-version-0-65}
+
+\definecolor{soa-scarlet}{RGB}{140,23,23}
+
+\setbeamercolor{soa@ftcolor}{fg=soa-scarlet}
+\setbeamercolor{soa@decorations}{fg=soa-scarlet}
+{\usebeamercolor{soa@decorations}}
+
+\newcommand{\soa@header}{%
+  \raisebox{0mm}[0pt][0pt]{%
+    \begin{pgfpicture}{0mm}{0mm}{0mm}{0mm}
+
+      \pgfsetlinewidth{1.5pt}
+      \color{soa-scarlet}
+      \pgfline{\pgfpoint{9mm}{0mm}}{\pgfpoint{113mm}{0mm}}
+
+    \end{pgfpicture}
+  }
+}
+
+\newcommand{\soa@logo}{%
+  \raisebox{0mm}[0pt][0pt]{%
+    \begin{pgfpicture}{0mm}{0mm}{0mm}{0mm}
+      \pgfdeclareimage[interpolate=true,height=6.7mm,width=12mm]{soa-logo-small}{soa-logo-small}
+
+      \pgfputat{\pgfpoint{4mm}{-10mm}}{\pgfbox[left,base]{\pgfuseimage{soa-logo-small}}}
+    \end{pgfpicture}
+  }
+}
+
+\defbeamertemplate*{headline}{soa}[1][left]
+{
+  \soa@logo
+}
+
+\defbeamertemplate*{frametitle}{soa}[1][right]
+{
+  \ifbeamercolorempty[bg]{frametitle}{}{\nointerlineskip}%
+  \@tempdima=\textwidth%
+  \advance\@tempdima by\beamer@leftmargin%
+  \advance\@tempdima by\beamer@rightmargin%
+  \begin{beamercolorbox}[sep=0.5cm,#1,wd=\the\@tempdima]{frametitle}
+    \usebeamerfont{frametitle}%
+    \vbox{}\vskip-1.5ex%
+    \if@tempswa\else\csname beamer@fte#1\endcsname\fi%
+    \hfill
+    \hfill
+    \strut\insertframetitle\strut\par%
+    {%
+      \ifx\insertframesubtitle\@empty%
+      \else%
+      {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
+      \fi
+    }%
+%    \vskip-ex%
+    \if@tempswa\else\vskip-.3cm\fi% set inside beamercolorbox... evil here...
+  \end{beamercolorbox}%
+  \vskip-18pt%
+  \soa@header
+  \vskip-2pt%
+}
+
+\setbeamertemplate{headline}[soa][0pt]
+\setbeamerfont{frametitle}{size=\large}
+\setbeamercolor{frametitle}{fg=soa-scarlet}
+\setbeamertemplate{frametitle}[soa][0pt]
+
+% the default contents of footline
+\newcommand{\soa@footline}{%
+  %\insertshortauthor,
+  \insertshortinstitute
+  \hfill
+  \insertshorttitle
+  \ifx\insertsubtitle\@empty\else, \insertshortsubtitle\fi
+  \hfill
+  \insertframenumber/\inserttotalframenumber}
+
+% color definition as in beamerouterthemeinfolines.sty
+\setbeamertemplate{footline}{%
+  \usebeamerfont{structure}
+  \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{soa@ftcolor}%
+    \Tiny\hspace*{4mm}\soa@footline\hspace{4mm}
+  \end{beamercolorbox}}
+
+% The user can override the default \umbc@footline by \setfootline{whatever}
+\newcommand{\setfootline}[1]{\renewcommand{\soa@footline}{#1}}
+
+% don't show navigation buttons
+%\setbeamertemplate{navigation symbols}{}
+
+\mode<all>

@@ -1,0 +1,15 @@
+\ProvidesPackage{beamerthemesoa}[2009/12/31 v1.0 for beamer 3.01]
+
+\mode<presentation>
+
+\useoutertheme{soa}
+\usecolortheme{soa}
+
+\setbeamertemplate{footline}[text line]{%
+  \vbox{%
+    \insertvrule{1.5pt}{soa@decorations.fg}%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=2.25ex,dp=1ex]{soa@decorations}%
+            \Tiny\hspace*{4mm}\soa@footline\hspace{4mm}
+    \end{beamercolorbox}}}
+
+\mode<all>
