@@ -1,3 +1,22 @@
 % vim: set tw=78 sts=2 sw=2 ts=8 aw et ai:
 
-And there was light.
+Steganography is the science of encoding messages in such a way that only the
+sender and receiver can read them. It’s different from cryptography in the
+sense that you don’t actually encode the message with a key or an algorithm,
+instead hiding the message in things like images (each letter in a pixel, far
+from each other enough so it doesn’t raise suspicion), audio files (a certain
+tone at a certain interval can signify a letter) and even plain text
+(repetition of certain letters can translate into a hidden message).
+
+Although steganography has been used as early as Ancient Greece, the constant
+development of technology has spawned a new field of research, namely digital
+steganography. This focuses more on applying steganography in sending messages
+over a network, either for increased security (plain cryptography can be
+cracked if the attacked figures out what type of encryption you are using),
+either for sending messages in such a way the network administrator is unaware
+of them (for trivial tasks that would otherwise cost the user money, e.g. in a
+cloud environment).
+
+The purpose of this paper is to offer a solution for hiding messages in the
+TCP/IP header. We aim to offer both a decent amount of space to store the
+message and an encoding that will minimize the size of the message.
