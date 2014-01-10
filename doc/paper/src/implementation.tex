@@ -9,6 +9,69 @@ to comprehend.
 
 \subsection{Input and Output}
 
+
+The I/O module has two functions : getting the input from the user and printing
+the response from the server after decoding.
+
+For the input fetching, we assume that the user wants to run multiple commands
+on the remote server or send a script/config file to the server. For the first
+scenario, we will have an infinite loop that will read each command, send it to 
+the Codec module and wait for response. As soon as the user inputs the "quit"
+command, the session is terminated.
+
+\begin{lstlisting}[caption={Basic command processing},
+                   label={lst:our-tcphdr},
+                   basicstyle=\footnotesize,
+                   captionpos=b,
+                   frame=single,
+                   language=C
+                  ]
+
+while(1){
+  Get command for stdin;
+  if command == "quit"
+    break;
+  Send command to Codec;
+  Wait for answer;
+  Print answer;
+}
+\end{lstlisting}
+
+If the user chooses to send a script or a config file to the server, we must open
+the given file, send each line to the Codec module (which must first notify the server 
+that a file is being sent) and then ask the user what the next action will be. At this
+point, the user can choose to either terminate the session, send another file or send 
+commands. 
+
+\begin{lstlisting}[caption={File processing},
+                   label={lst:our-tcphdr},
+                   basicstyle=\footnotesize,
+                   captionpos=b,
+                   frame=single,
+                   language=C
+                  ]
+
+
+  Get file for stdin;
+  Open file;
+  while (not end of file)
+    Send each line to Codec;
+  Prompt user for next action;
+  if "quit"
+    End session;
+  elseif "continue"
+    Send new file (goto first step);
+  else
+    Send commands (goto while(1));
+
+\end{lstlisting}
+
+Result printing is only present if the sent command had actual output. If not, nothing will
+be printed and the user will be prompted for the next command. The file transfer will not 
+generate output.
+
+
+
 \subsection{Information Encoding}
 
 Another module of our project is represented by the Encoding module. As we
