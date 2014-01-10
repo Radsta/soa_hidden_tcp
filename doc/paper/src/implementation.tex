@@ -121,7 +121,14 @@ when it arrived at the destination. For this to be accomplished, we needed to
 send the codebook along with the encoded message, so the first bytes of the
 field had to define the length of the codebook and describe the codebook itself.
 
-Another problem to overcome was to be continued...
+Another problem to overcome was that the commands given through our protocol
+could easily exceed the size of a single TCP options field, considering the
+codebook and its description included. This was solved by giving each command
+a unique identificator, splitting the message and adding the identificator to
+each resulting part.
+
+To be continued here with a scheme of how the message looks like after encoding,
+compressing and splitting.
 
 \subsection{Network Communication}
 
