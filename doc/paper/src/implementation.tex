@@ -175,7 +175,7 @@ checksum is are not enforced. Therefore, the value of this TCP option does not
 have a distinguishable pattern to abide by, making it perfect for sending data.
 
 There is a small note to be made with regards to intermediary networking devices.
-Researchers of the Multipath TCP protocol \cite{mptcp} also use TCP options, but
+Researchers of the Multipath TCP protocol \cite{mptcp-how-hard} also use TCP options, but
 their goal is to pass metadata which is specific to a new protocol. Nevertheless,
 they have identified issues with routing equipment, named middleboxes in their work,
 which could interfere with our solution as well:
@@ -198,3 +198,50 @@ behavior with regards to unknown TCP options and how common they can be found in
 the Internet is beyond the scope of this paper however.
 
 \subsection{Command and Control}
+
+The Command and Control module, C2 in short, is exclusive to the server and it is
+employed to handle any of the set of commands sent by the client, together with additional
+system settings that might be required. In the architectural view, the C2 module
+communicates with the Codec module. The Codec module provides the C2 module with
+its input, i.e. the string that results after the decompressing and decoding stages
+have been successfully performed and receives from the C2 module the output, i.e.
+the command results.
+	
+The "command" section of the C2 module is responsible with two important operations:
+\begin{itemize}
+\item Setting the UID and the GID before attempting to execute the command \\
+The server runs with root privileges on the destination machine in order to be
+able to create the raw sockets which are needed to establish the TCP communication
+link. Naturally, to avoid security breaches we do not wish to allow any potentially
+harmful remote user to run commands as root and therefore we create a specific
+account with normal or carefully customized privileges. This account will be used
+to run the given commands. The command submodule accomplishes this step by setting
+the UID and the GID as appropriate.
+\item Resetting the uid and gid back to their original values \\
+After the command is executed, the command submodule restores the original state
+of the UID and GID by using the setresuid() and setresgid() functions provided by glibc.
+\end{itemize}
+
+The "control" section is responsible with the effective execution of the received
+command. Due to security concerns, we do not blindly execute the command even if
+we have previously set the UID and GID. Instead we have implemented a command parser
+to extract the tokens and the operands from the given string, which are then
+analyzed for safety. The module supports:
+\begin{itemize}
+\item external commands with multiple arguments
+\item internal shell commands (such as cd)
+\item redirects (>, <, $\gg$, 2\&> and so on)
+\item pipes
+\item sequential/parallel command operators (such as ;, | and \&)
+\item conditional command operators (\&\&, ||) 
+\end{itemize}
+
+This implementation guarantees correct priority of operators in accordance with
+shell rules and also supports setting and reading environment variables.
+If the submodule has detected an unsafe or unsupported operation request,
+an error message is generated.
+
+After the command is executed, the control submodule reads from stdin and stderr
+and passes the output back to the Codec module, which will compress and encode
+it into as many packets as it is necessary.
+
