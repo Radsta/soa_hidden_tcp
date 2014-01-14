@@ -127,8 +127,18 @@ codebook and its description included. This was solved by giving each command
 a unique identificator, splitting the message and adding the identificator to
 each resulting part.
 
-To be continued here with a scheme of how the message looks like after encoding,
-compressing and splitting.
+\begin{figure}
+  \centering
+  \includegraphics[width=0.5\textwidth]{img/encoded}
+  \caption{Example of two fields long message}
+  \label{fig:encoded}
+\end{figure}
+
+The last thing to mention here is that we had to know when to stop reading
+(when the message is complete). We have considered multiple choices, including
+one which implied a magic bits combination placed at the end of the transmission.
+The final decision was to include a field named "encoded payload length", the
+number of bits the encoded message contains.
 
 \subsection{Network Communication}
 
