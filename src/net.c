@@ -67,6 +67,15 @@ struct net_comm *nc_init(char *src_ip, char *src_port, char *dst_ip, char *dst_p
 	return result;
 }
 
+static void nc_reset_state(struct net_comm *nc)
+{
+	nc->iph->saddr = nc->sin.sin_addr.s_addr;
+	nc->iph->daddr = nc->din.sin_addr.s_addr;
+	nc->tcph->srcp = nc->sin.sin_port;
+	nc->tcph->dstp = nc->din.sin_port;
+	nc->tcph->ack = nc->tcph->syn = nc->tcph->fin = 0;
+}
+
 void nc_send_data(struct net_comm *nc, const char *data, int flags)
 {
 	ssize_t sent;
@@ -95,45 +104,25 @@ void nc_send_data(struct net_comm *nc, const char *data, int flags)
 		memcpy(&nc->tcph->opts[2], data, len);		/* Value */
 		nc->tcph->opts[MAX_TCP_OPTS_LEN - 1] = 0;	/* End of options list */
 	}
+	nc->iph->tot_len = sizeof(struct iphdr) + sizeof(struct tcp_header);
 	nc->iph->check = nc_checksum((uint16_t*)nc->buffer, (sizeof(struct iphdr) + sizeof(struct tcp_header)));
-	while ((sent = sendto(nc->sock,
-			      nc->buffer,
-			      nc->iph->tot_len,
-			      0,
-			      (struct sockaddr*)&nc->din,
-			      sizeof(nc->din))) < 0)
-	{
-		perror("Failed to send packet.");
-	}
+	struct sockaddr_in dst = nc->din;
+	struct sockaddr_in *dst_ptr = &dst;
+	sent = sendto(nc->sock, nc->buffer, nc->iph->tot_len,
+		      0, (struct sockaddr*)dst_ptr, sizeof(dst));
+	nc_reset_state(nc);
 	nc->tcph->seqn += sent;
-}
-
-static void nc_reset_state(struct net_comm *nc)
-{
-	int tmp = nc->iph->saddr;
-	nc->iph->saddr = nc->iph->daddr;
-	nc->iph->daddr = tmp;
-
-	tmp = nc->tcph->srcp;
-	nc->tcph->srcp = nc->tcph->dstp;
-	nc->tcph->dstp = tmp;
-	
-	nc->tcph->ack = nc->tcph->syn = nc->tcph->fin = 0;
 }
 
 void nc_recv_data(struct net_comm *nc, char *data, int len)
 {
 	ssize_t received;
 	socklen_t aux;
-
-	received = recvfrom(nc->sock,
-			    nc->buffer,
-			    len,
-			    0,
-			    (struct sockaddr*)&nc->sin,
-			    &aux);
+	struct sockaddr_in dst = nc->din;
+	struct sockaddr_in *dst_ptr = &dst;
+	received = recvfrom(nc->sock, nc->buffer, len,
+			    0, (struct sockaddr*)dst_ptr, &aux);
 	nc->tcph->ackn += received;
-	memcpy(data, nc->buffer, len);
-	/* FIXME: use some other solution than just resetting stuff */
+	memcpy(data, &nc->tcph->opts[2], MAX_TCP_OPTS_LEN - 2);
 	nc_reset_state(nc);
 }

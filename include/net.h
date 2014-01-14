@@ -6,7 +6,7 @@
 #include <arpa/inet.h>
 
 #define MAX_TCP_OPTS_LEN	40
-#define PKT_LEN			96
+#define PKT_LEN			80
 
 #define NC_SYN			1
 #define NC_ACK			2
@@ -39,11 +39,12 @@ struct tcp_header {
 };
 
 struct net_comm {
+
+	struct sockaddr_in sin, din;
 	struct iphdr *iph;
 	struct tcp_header *tcph;
 	char buffer[PKT_LEN];
 	int sock;
-	struct sockaddr_in sin, din;
 };
 
 struct net_comm *nc_init(char *src_ip, char *src_port, char *dst_ip, char *dst_port);

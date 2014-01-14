@@ -13,20 +13,27 @@ int main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 
-	nc = nc_init(argv[1], argv[2], argv[3], argv[4]);
-
 	if (strcmp(&argv[0][2], "client") == 0) {
+		nc = nc_init(argv[1], argv[2], argv[3], argv[4]);
 		nc_send_data(nc, "", NC_SYN);		/* send SYN */
 		nc_recv_data(nc, data, PKT_LEN);	/* recv SYNACK */
 		nc_send_data(nc, "", NC_ACK);		/* send ACK */
 		nc_send_data(nc, "test", 0);		/* send data */
+		nc_send_data(nc, "", NC_FIN);		/* FIN */
+		nc_recv_data(nc, data, PKT_LEN);	/* ACK */
+		nc_recv_data(nc, data, PKT_LEN);	/* FIN */
+		nc_send_data(nc, "", NC_ACK);		/* ACK */
 	} else {
+		nc = nc_init(argv[1], argv[2], argv[3], argv[4]);
 		nc_recv_data(nc, data, PKT_LEN);	/* recv SYN */
 		nc_send_data(nc, "", NC_SYN | NC_ACK);	/* send SYNACK */
 		nc_recv_data(nc, data, PKT_LEN);	/* recv ACK */
 		nc_recv_data(nc, data, PKT_LEN);	/* recv data */
-		struct tcp_header *data_tcph = (struct tcp_header*)(data + sizeof(struct iphdr));
-		printf("%s\n", data_tcph->opts);
+		printf("%s\n", data);
+		nc_recv_data(nc, data, PKT_LEN);	/* FIN */
+		nc_send_data(nc, "", NC_ACK);		/* ACK */
+		nc_send_data(nc, "", NC_FIN);		/* FIN */
+		nc_recv_data(nc, data, PKT_LEN);	/* ACK */
 	}
 	
 	close(nc->sock);
