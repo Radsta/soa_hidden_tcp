@@ -27,13 +27,13 @@ The second test we performed is whether a modern firewall equipment handles
 our covert session differently. As can be seen from Figure
 \ref{fig:server-run} and Figure \ref{fig:client-run}, Cisco ASA does not strip
 or drop packets which use the TCP Alternate Checksum Data option. The
-hostnames are conveniantly set to illustrate the two endpoints. It is worth
+hostnames are conveniently set to illustrate the two endpoints. It is worth
 mentioning that we could not explore the full range of options such a
 dedicated device offers, but we found no explicit feature that affects TCP
 options directly.
 
 Finally, we considered a real world test, between two public IPs. Despite our
-previous tests were encouraging, we could not replicate the results in a real
+previous tests being encouraging, we could not replicate the results in a real
 world scenario. Since the intermediary devices are not under our control, we
 cannot be certain that the root cause is explicit filtering of certain TCP
 options or simply a default behaviour like the ones described in Subsection
