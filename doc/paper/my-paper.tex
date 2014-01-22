@@ -6,7 +6,6 @@
 \usepackage[english]{babel}
 %\usepackage{hyperref}	  % use \url{http://$URL} or \href{http://$URL}{Name}
 \usepackage{underscore}	  % underscores need not be escaped
-\usepackage{subfigure}
 \usepackage{verbatim}
 \usepackage{float}
 
@@ -18,6 +17,8 @@
 
 % Support for including graphics
 \usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
 \DeclareGraphicsExtensions{.pdf,.png,.jpg}
 
 \begin{document}
@@ -28,8 +29,8 @@
                           Valeriu Stanciu, Radu Stancu}
 \IEEEauthorblockA{Automatic Control and Computers Faculty\\
 Politehnica University of Bucharest\\
-Emails: silviu.petria@gmail.com, silviupopescu1990@gmail.com,
-valeriudanielstanciu@yahoo.com, stancumradu@gmail.com}}
+Emails: \{silviu.petria, silviu.popescu,
+valeriu.stanciu, radu.stancu\}@cti.pub.ro}}
 
 \maketitle
 
@@ -69,7 +70,7 @@ Steganography, Security, TCP/IP Headers, Covert channels
 \label{sec:results}
 \input{src/results}
 
-\section{Conclusion and Further Work}
+\section{Conclusions and Further Work}
 \label{sec:conclusion}
 \input{src/conclusion}
 

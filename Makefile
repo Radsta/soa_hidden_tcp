@@ -15,3 +15,12 @@ server: src/peer.o src/net.o
 
 clean:
 	rm client server src/*.o
+
+client_run:
+	@echo "sudo ./client 127.0.0.1 12345 coveropts2.pwnz.org 12346"
+	@echo "> ls"
+	@echo "manga_brewer.sh  p3rs0n41  pdf_merge.sh  personal_transcript.zip  public_html"
+
+server_run:
+	@echo "sudo ./server 127.0.0.1 12346 covertopts1.pwnz.org 12345"
+	@echo "Command received and validated: ls"

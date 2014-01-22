@@ -1,3 +1,27 @@
 % vim: set tw=78 sts=2 sw=2 ts=8 aw et ai:
+We have performed three rounds of experiments in order to test the efficiency and
+robustness of our system. Our testbed consists of two Linux boxes running Debian 7.3
+"wheezy" with Linux kernel 3.12-amd64.
 
-In order to define recursion, one must first define recursion.
+In the first round of experiments, we ran the server and the client on the same
+station using the loopback interface to send packets. In this way we have removed
+the danger of middlebox interference, focusing only on the functionality of our
+implemented modules. Tests consisted of sending several commands from the client
+and receiving them on the server, followed by relaying back the output to the client.
+We have covered various cases such as short commands, long commands that needed to
+be split up into several packets, invalid commands that needed to be caught by
+our parser, commands that violated the privilege level, commands read from standard
+input or from a script given as argument to the client.
+
+The second round of experiments targeted middlebox interference in a virtual
+environment. For this we use Qemu with Cisco ASA 9.0(1) inside our Debian system.
+The version of Qemu we use is a modified 14.0. This setup comprises three Qemu VMs:
+a client, a server and an ASA firewall running Cisco IOS version 15.1(1)SY between
+them. Packets could be sent between the client and the server using virtual
+interfaces and could be monitored from inside the firewall. We experimented using
+the same set of tests from the first round.
+
+The final set of tests concerned itself with middlebox interference in the real
+world. This time we sent packets between two public IP addresses with three real
+routers inbetween. The drawback of this setup is the lack of control over the
+middleboxes and the inability to determine the exact cause of eventual failures.
