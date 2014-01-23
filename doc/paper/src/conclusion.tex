@@ -12,12 +12,12 @@ single segment. We have used the TCP header, more precisely the "Options"
 field, sending a total of 37 bytes per TCP segment.
 
 As future work, we would like to follow a few directions. First, we would like to
-see how the application behaves in a controled, larger system, so that we may solve
+see how the application behaves in a controlled, larger system, so that we may solve
 the problems that occured when we tried to send packets between two public IPs. If
 the problem is related to devices not supporting the extra options field, we might 
 consider sending packets to intermediate stations, on paths that we know are safe
-and will not cause that packets to drop. Second, since the application is modular,
-we would like to implement some modules in other , easier to use languages (I/O 
+and will not cause those packets to be dropped. Second, since the application is modular,
+we would like to implement some modules in other, easier to use languages (I/O 
 can be done in Python, which will greatly reduce code length). Third, cryptography
 can be added for further security, as well as other various optimizations if 
 necessary.
