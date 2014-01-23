@@ -16,8 +16,9 @@ see how the application behaves in a controlled, larger system, so that we may s
 the problems that occured when we tried to send packets between two public IPs. If
 the problem is related to devices not supporting the extra options field, we might 
 consider sending packets to intermediate stations, on paths that we know are safe
-and will not cause those packets to be dropped. Second, since the application is modular,
-we would like to implement some modules in other, easier to use languages (I/O 
-can be done in Python, which will greatly reduce code length). Third, cryptography
-can be added for further security, as well as other various optimizations if 
-necessary.
+and will not cause those packets to be dropped. Second, as you have seen, using
+Huffman encoding took us a large number of bytes to assure the necessary metadata
+(codebook, message length, etc). Future studies will include finding and
+implementing better compression algorithms to minimize the size of the
+communication. Third, cryptography will be a future thing to be added for
+improved security, in order to add a new level of hiding to our steganographic data.
