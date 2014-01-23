@@ -4,14 +4,14 @@ One attempt to use steganography for hiding messages in TCP/IP headers was
 presented in 2010 at ICACTE by Dhobale et al\cite{stegano-hiding-data}. They had 2
 scenarios in mind.
 
-On the one hand, using the Flags section of the IP header, particularly the DF flag, to send
+The first solution used the flags section of the IP header, particularly the DF flag, to send
 1 or 0 to the receiver, thus prompting an action. This scenario only works if
-the MF flag is set on 0, which makes the network receivers along the way to
+the MF flag is set on 0, which makes the network receivers along the way 
 ignore the DF flag. Although this method works, it's not suitable for longer
 messages because of the number of packets you would have to send over the
 network.
 
-On the other hand, using the IP identification field to send a message encrypted using chaotic
+The second scenario used the IP identification field to send a message encrypted using chaotic
 mixing. This method doesn't work if along the way a checker wants the field to
 contain certain information and it also splits messages into pieces, even
 smaller ones like "ABC", which can cause suspicion.
@@ -33,7 +33,7 @@ encapsulated inside TCP, IP, ICMP and UDP headers. They also use compression
 via Huffman trees for the messages. RSA plus Vigenere or Triple DES are used
 for encryption.
 
-Regarding the TCP header part of the project, SCONeP uses the two 32-bits
-fields from the header, sequence number and acknowledgement number. Relating
-to them, we are using the options field in order to achieve a better length
+Regarding the TCP header part of the project, SCONeP uses the two 32-bit
+fields from the header: sequence number and acknowledgement number. Relating
+to them, we are using the options field in order to achieve a greater length
 and a broader freedom for the message sent.

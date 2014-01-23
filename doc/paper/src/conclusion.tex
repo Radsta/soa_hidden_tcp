@@ -5,20 +5,21 @@ approaches. Steganography is a field with a very long history. Starting from
 the antique wax tablets, continuing with invisible ink, steganography has also
 evolved, so that nowadays we can speak of digital steganography.
 
-Our project successfully adds up to this research direction. We have managed to
-implement a novel approach, we have a working steganographic communication and,
+Our project successfully makes a contribution to this research direction. We have managed to
+implement a novel approach, we have a working steganographic communication system and,
 as far as we know, the biggest amount of hidden data transmitted inside a
-single segment. We have used the TCP header, more precisely the "Options"
+single segment. We have used the TCP header, more precisely the options
 field, sending a total of 37 bytes per TCP segment.
 
-As future work, we would like to follow a few directions. First, we would like to
-see how the application behaves in a controlled, larger system, so that we may solve
+As future work, we would like to consider several avenues of improvement. First, we would like to
+see how the application behaves in a larger system which is directly under out
+control, so that we may solve
 the problems that occured when we tried to send packets between two public IPs. If
-the problem is related to devices not supporting the extra options field, we might 
+the issue is related to devices not supporting the extra options field, we might
 consider sending packets to intermediate stations, on paths that we know are safe
 and will not cause those packets to be dropped. Second, as it can be observed, using
 Huffman encoding required a large number of bytes to accomodate the necessary metadata
 (codebook, message length, etc). Future studies will include finding and
 implementing better compression algorithms to minimize the size of the
 communication. Third, cryptography will be a future area of improvement for
-better security in order to add a new level of hiding to our steganographic data.
+better security in order to add a new level of obfuscation to our steganographic data.
